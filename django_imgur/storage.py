@@ -1,7 +1,7 @@
 import os.path
 import base64
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
     from StringIO import StringIO
 from django.core.cache import cache
@@ -75,7 +75,7 @@ class ImgurStorage(Storage):
             'type': 'base64',
         }
 
-        data.update({meta: config[meta] for meta in set(self.client.allowed_image_fields).intersection(config.keys())})
+        data.update({meta: config[meta] for meta in set(self.client.allowed_image_fields).intersection(list(config.keys()))})
         return self.client.make_request('POST', 'upload', data, anon)
 
     def delete(self, name):
